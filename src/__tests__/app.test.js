@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import App from '../app.tsx';
 
@@ -13,7 +13,7 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
  * @returns {ShallowWrapper}
  */
 const setup = (props = {}, state = null) => {
-  return shallow(<App {...props} />);
+  return mount(<App {...props} />);
 };
 
 /**
@@ -50,13 +50,20 @@ describe('app render', () => {
 });
 
 describe('Testing useState hook, change evt, submit evt', () => {
+  let wrapper;
+  let mockSetValue = jest.fn();
+  beforeEach(() => {
+    mockSetValue.mockClear();
+    React.useState = jest.fn(() => ['', mockSetValue]);
+    wrapper = setup();
+  });
   test('state updates with value of input on change', () => {
     // step 1 -> create mock fn, sub React.useState with mock=>[initState, mock fn]
-    const mockSetValue = jest.fn();
-    React.useState = jest.fn(() => ['', mockSetValue]);
+    // const mockSetValue = jest.fn();
+    // React.useState = jest.fn(() => ['', mockSetValue]);
 
     // step 2 -> find input box
-    const wrapper = setup();
+    // const wrapper = setup();
     const inputBox = findByTestAttr(wrapper, 'text-input');
 
     // step 3 -> simulate change event
@@ -65,5 +72,16 @@ describe('Testing useState hook, change evt, submit evt', () => {
 
     // step 4 -> expect mock fn toHaveBeenCalledWith with mockEvent.target.value
     expect(mockSetValue).toHaveBeenCalledWith('wash dishes');
+  });
+
+  test('clicking submit btn clears the input value', () => {
+    // const btn = findByTestAttr(wrapper, 'btn');
+    // const mockEvent = { preventDefault() {} };
+    // btn.simulate('click', mockEvent);
+    const form = findByTestAttr(wrapper, 'to-do-form');
+    const mockEvent = { preventDefault() {} };
+    form.simulate('submit', mockEvent)
+    
+    expect(mockSetValue).toHaveBeenCalledWith('');
   });
 });

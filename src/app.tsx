@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 type FormElem = React.FormEvent<HTMLFormElement>;
+type ChangeEvt = React.ChangeEvent<HTMLInputElement>;
 
 function App(): JSX.Element {
   const [value, setValue] = React.useState<string>('');
@@ -9,7 +10,7 @@ function App(): JSX.Element {
     e.preventDefault();
     setValue('');
   };
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvt): void => {
     setValue(e.target.value);
   };
   return (
