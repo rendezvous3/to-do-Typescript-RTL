@@ -16,10 +16,16 @@ export const useSetTodos = () => {
     newTodos[index].complete = !newTodos[index].complete;
     setTodos(newTodos);
   };
+  const removeTodo = (index: number): void => {
+    const newTodos: ITodo[] = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
   return {
     todos,
     setTodos,
     addTodo,
-    completeTodo
+    completeTodo,
+    removeTodo
   };
 };

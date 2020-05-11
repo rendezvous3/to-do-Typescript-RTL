@@ -79,4 +79,18 @@ describe('Form Submit', () => {
     fireEvent.click(secondBtn);
     expect(getByText('Incomplete')).toBeTruthy();
   });
+  test('removes todo', () => {
+    // get doesnt work for chechking non existance
+    // https://stackoverflow.com/questions/52783144/how-do-you-test-for-the-non-existence-of-an-element-using-jest-and-react-testing
+    const { debug, getAllByTestId, queryByTestId } = app;
+    const firstRemoveBtn = getAllByTestId('remove-to-do')[0];
+    // if we remove first btn, second btn becomes first
+    //const secondRemoveBtn = getAllByTestId('remove-to-do')[1];
+    fireEvent.click(firstRemoveBtn);
+    let todos = getAllByTestId('to-do-block');
+    expect(todos.length).toBe(1);
+    fireEvent.click(firstRemoveBtn);
+    // debug();
+    expect(queryByTestId('to-do-block')).toBeNull();
+  });
 });

@@ -11,7 +11,7 @@ interface ITodo {
 
 function App(): JSX.Element {
   const { value, setValue, handleChange } = useOnChange();
-  const { todos, addTodo, completeTodo } = useSetTodos();
+  const { todos, addTodo, completeTodo, removeTodo } = useSetTodos();
   // debugger;
   const handleSubmit = (e: FormElem): void => {
     e.preventDefault();
@@ -46,6 +46,9 @@ function App(): JSX.Element {
               <h4>{todo.text}</h4>
               <button type='button' data-testid='to-do-btn' onClick={() => completeTodo(index)}>
                 {todo.complete ? 'Incomplete' : 'Complete'}
+              </button>
+              <button data-testid='remove-to-do' onClick={() => removeTodo(index)}>
+                Remove
               </button>
             </div>
           );
